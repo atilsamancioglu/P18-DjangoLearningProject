@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404, HttpResponseNotFound
-
+from django.http import HttpResponse, Http404, HttpResponseNotFound, HttpResponseRedirect
+from django.urls import reverse
 
 course_dictionary = {
     "python" : "Python Course Page",
@@ -23,3 +23,12 @@ def course(request, item):
 
 def multiply_view(request, num1, num2):
     return HttpResponse(f"{num1} * {num2} = {num1 * num2}")
+
+def course_number_view(request, num1): #atilsamancioglu.com/10 -> atilsamancioglu.com/kotlin
+    course_list = list(course_dictionary.keys())
+    try:
+        course = course_list[num1]
+        page_to_go = reverse("course", args=[course])
+        return HttpResponseRedirect(page_to_go)
+    except:
+        return HttpResponseNotFound("Not found! Please look for another course!")
